@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeLeaf.org">
+<html xmlns:th="http://www.thymeLeaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -62,7 +62,13 @@
 
     <div>
         <h2>Manage Users</h2>
-        <a th:href="@{/users/new}">Create New User</a>
+        <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
+        &nbsp;&nbsp;
+        <a th:href="@{/users/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+        &nbsp;&nbsp;
+        <a th:href="@{/users/export/excel}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
+        &nbsp;&nbsp;
+        <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark"></a>
     </div>
 
     <div th:if="${message != null}" class="alert alert-success text-center">
@@ -75,10 +81,14 @@
             <input type="hidden" name="sortDir" th:value="${sortDir}" />
             Filter: &nbsp;
             <input type="search" name="keyword" th:value="${keyword}" class="form-control" required>
-            &nbsp;&nbsp;
-            <input type="submit" value="Search" class="btn btn-primary" />
-            &nbsp;&nbsp;
-            <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()" />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" value="Search" class="btn btn-primary" >
+                <i class="fas fa-search"></i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()" >
+                <i class="fas fa-eraser"></i>
+            </button>
         </form>
     </div>
 

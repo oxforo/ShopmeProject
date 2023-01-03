@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class UserController {
 
     @GetMapping("/users")
     public String listFirstPage(Model model) {
-        return listByPage(1,model, "firstName", "asc", null);
+        return listByPage(1, model, "firstName", "asc", null);
     }
 
     @GetMapping("/users/page/{pageNum}")
@@ -80,7 +81,7 @@ public class UserController {
 
     @PostMapping("/users")
     public String saveUser(User user, RedirectAttributes redirectAttributes,
-                           @RequestParam("image")MultipartFile multipartFile) throws IOException {
+                           @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -145,7 +146,7 @@ public class UserController {
     @GetMapping("/user/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id,
                                           @PathVariable("status") boolean enabled,
-                                          RedirectAttributes redirectAttributes){
+                                          RedirectAttributes redirectAttributes) {
 
         userService.updateUserEnabledStatus(id, enabled);
         String status = enabled ? "enabled" : "disabled";
@@ -153,4 +154,30 @@ public class UserController {
 
         return "redirect:/users";
     }
+
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+
+        List<User> listUsers = userService.listAll();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, response);
     }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+
+        List<User> listUsers = userService.listAll();
+
+        UserExcelExporter exporter = new UserExcelExporter();
+        exporter.export(listUsers, response);
+    }
+
+    @GetMapping("/users/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+
+        List<User> listUsers = userService.listAll();
+
+        UserPdfExporter exporter = new UserPdfExporter();
+        exporter.export(listUsers, response);
+    }
+}
