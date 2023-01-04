@@ -92,15 +92,19 @@
         </form>
     </div>
 
-    <div>
+    <div class="full-details">
         <table class="table table-bordered table-hover table-responsive-xl ">
             <thead class="thead-dark">
                 <tr>
-                    <th th:replace="fragments :: column_link('id','User ID')" />
+                    <th class="hideable-column">
+                        <th th:replace="fragments :: column_link('id','User ID', 'tag')" />
+                    </th>
                     <th>Photos</th>
-                    <th th:replace="fragments :: column_link('email','E-mail')" />
-                    <th th:replace="fragments :: column_link('firstName','First Name')" />
-                    <th th:replace="fragments :: column_link('lastName','Last Name')" />
+                    <th class="hideable-column">
+                        <th th:replace="fragments :: column_link('email','E-mail', 'tag')" />
+                    </th>
+                    <th th:replace="fragments :: column_link('firstName','First Name', 'none')" />
+                    <th th:replace="fragments :: column_link('lastName','Last Name', 'none')" />
                     <th>
                         Roles
 <!--                        <a th:if="${sortField != 'roles'}" class="text-white"-->
@@ -116,19 +120,19 @@
 <!--                        <span th:if="${sortField == 'roles'}"-->
 <!--                              th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>-->
                     </th>
-                    <th th:replace="fragments :: column_link('enabled','Enabled Name')" />
+                    <th th:replace="fragments :: column_link('enabled','Enabled', 'none')" />
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="user : ${listUsers}">
-                    <td> [[${user.id}]]</td>
+                    <td class="hideable-column"> [[${user.id}]]</td>
                     <td>
                         <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
                         <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
                         style="width: 100px"/>
                     </td>
-                    <td> [[${user.email}]]</td>
+                    <td class="hideable-column"> [[${user.email}]]</td>
                     <td> [[${user.firstName}]]</td>
                     <td> [[${user.lastName}]]</td>
                     <td> [[${user.roles}]]</td>
@@ -153,6 +157,39 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="less-details">
+        <div th:each="user : ${listUsers}" class="row m-1">
+            <div class="col-4">
+                <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+                <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
+                     style="width: 100px"/>
+            </div>
+            <div class="col-8">
+                <div>[[${user.fullName}]] </div>
+                <div>[[${user.roles}]] </div>
+                <div class="mt-2">
+                    <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/user/' + ${user.id} + '/enabled/false'}"
+                       title="Disable this user"
+                    ></a>
+                    <a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+                       th:href="@{'/user/' + ${user.id} + '/enabled/true'}"
+                       title="Enable this user"
+                    ></a>
+                    &nbsp;
+                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
+                       title="Edit this user"> </a>
+                    &nbsp;&nbsp;
+                    <a class="fas fa-trash fa-2x icon-dark link-delete"
+                       th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
+                    </a>
+                </div>
+            </div>
+
+            <div>&nbsp;</div>
+
     </div>
 
     <div class="text-center m-1" th:if="${totalItems > 0}">
