@@ -41,12 +41,13 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
+                                        .antMatchers("/users/**").hasAuthority("Admin")
                                         .anyRequest().authenticated()
                                         .and()
                                         .formLogin()
-                                            .loginPage("/login")
-                                            .usernameParameter("email")
-                                            .permitAll()
+                                        .loginPage("/login")
+                                        .usernameParameter("email")
+                                        .permitAll()
                                         .and().logout().permitAll()
                                         .and()
                                         .rememberMe()
