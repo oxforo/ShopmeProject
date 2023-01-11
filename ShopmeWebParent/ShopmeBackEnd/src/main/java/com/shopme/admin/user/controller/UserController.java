@@ -148,7 +148,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/user/{id}/enabled/{status}")
+    @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id,
                                           @PathVariable("status") boolean enabled,
                                           RedirectAttributes redirectAttributes) {
