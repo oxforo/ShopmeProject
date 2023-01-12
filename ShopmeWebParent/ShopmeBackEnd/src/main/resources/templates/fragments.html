@@ -16,9 +16,9 @@
 </head>
 
 <body>
-  <th th:fragment="column_link(fieldName, columnLabel,removeTag)" th:remove="${removeTag}">
+  <th th:fragment="column_link(domain, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <a class="text-white"
-       th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName}
+       th:href="@{'/' + ${domain} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}
        + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir}
        + ${keyword != null ? '&keyword=' + keyword : ''}}">
       [[${columnLabel}]]
@@ -28,8 +28,8 @@
   </th>
 
 
-  <a th:fragment="page_link(page, pageLabel)"
-     class="page-link" th:href="@{'/users/page/' + ${page} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
+  <a th:fragment="page_link(domain, page, pageLabel)"
+     class="page-link" th:href="@{'/' + ${domain} + '/page/' + ${page} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
                 + ${keyword != null ? '&keyword=' + keyword : ''}}">
       [[${pageLabel}]]
   </a>

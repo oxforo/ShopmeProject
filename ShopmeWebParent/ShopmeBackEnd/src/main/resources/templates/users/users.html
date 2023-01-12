@@ -45,14 +45,14 @@
             <thead class="thead-dark">
                 <tr>
                     <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('id','User ID', 'tag')" />
+                        <th th:replace="fragments :: column_link('users','id','User ID', 'tag')" />
                     </th>
                     <th>Photos</th>
                     <th class="hideable-column">
-                      <th th:replace="fragments :: column_link('email','E-mail', 'tag')" />
+                      <th th:replace="fragments :: column_link('users','email','E-mail', 'tag')" />
                     </th>
-                    <th th:replace="fragments :: column_link('firstName','First Name', 'none')" />
-                    <th th:replace="fragments :: column_link('lastName','Last Name', 'none')" />
+                    <th th:replace="fragments :: column_link('users','firstName','First Name', 'none')" />
+                    <th th:replace="fragments :: column_link('users','lastName','Last Name', 'none')" />
                     <th>
                         Roles
 <!--                        <a th:if="${sortField != 'roles'}" class="text-white"-->
@@ -68,7 +68,7 @@
 <!--                        <span th:if="${sortField == 'roles'}"-->
 <!--                              th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>-->
                     </th>
-                    <th th:replace="fragments :: column_link('enabled','Enabled', 'none')" />
+                    <th th:replace="fragments :: column_link('users','enabled','Enabled', 'none')" />
                     <th></th>
                 </tr>
             </thead>
@@ -98,7 +98,7 @@
                         <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
                            title="Edit this user"> </a>
                         &nbsp;
-                        <a class="fas fa-trash fa-2x icon-dark link-delete"
+                        <a class="fas fa-trash fa-2x icon-dark link-delete-user" th:userId="${user.id}"
                            th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
                         </a>
                     </td>
@@ -130,7 +130,7 @@
                     <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
                        title="Edit this user"> </a>
                     &nbsp;&nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete"
+                    <a class="fas fa-trash fa-2x icon-dark link-delete-user" th:userId="${user.id}"
                        th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
                     </a>
                 </div>
@@ -152,21 +152,21 @@
         <nav>
             <ul class="pagination justify-content-center">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1,'First')"></a>
+                    <a th:replace="fragments :: page_link('users',1,'First')"></a>
                 </li>
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1},'Previous')"></a>
+                    <a th:replace="fragments :: page_link('users',${currentPage - 1},'Previous')"></a>
                 </li>
 
                 <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="fragments :: page_link(${i},${i})"></a>
+                    <a th:replace="fragments :: page_link('users',${i},${i})"></a>
                 </li>
 
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1},'Next')"></a>
+                    <a th:replace="fragments :: page_link('users',${currentPage + 1},'Next')"></a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages},'Last')"></a>
+                    <a th:replace="fragments :: page_link('users',${totalPages},'Last')"></a>
                 </li>
             </ul>
         </nav>

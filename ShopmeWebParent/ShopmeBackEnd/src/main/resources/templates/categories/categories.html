@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeLeaf.org" xmlns="http://www.w3.org/1999/html"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments :: page_head('User - Shopme Admin')" />
+<head th:replace="fragments :: page_head('Category - Shopme Admin')" />
 
 <body>
 <div class = "container-fluid">
@@ -36,46 +36,44 @@
         </form>
     </div>
 
-    <div class="full-details">
+    <div>
         <table class="table table-bordered table-hover table-responsive-xl ">
             <thead class="thead-dark">
             <tr>
-                <th>ID</th>
+                <th th:replace="fragments :: column_link('categories','id','ID', 'None')" />
                 <th>Category Image</th>
-                <th>Category Name</th>
-                <th>Alias</th>
-                <th>Enable</th>
+                <th th:replace="fragments :: column_link('categories','name','Category Name', 'none')" />
+                <th th:replace="fragments :: column_link('categories','alias','Alias', 'none')" />
+                <th th:replace="fragments :: column_link('categories','enabled','Enable', 'none')" />
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${listUsers}">
-                <td class="hideable-column"> [[${user.id}]]</td>
+            <tr th:each="category : ${listCategories}">
+                <td> [[${category.id}]]</td>
                 <td>
-                    <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                    <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
+                    <span th:if="${category.image == null}" ></span>
+                    <img th:if="${category.image != null}" th:src="@{${category.categoryImagePath}}"
                          style="width: 100px"/>
                 </td>
-                <td class="hideable-column"> [[${user.email}]]</td>
-                <td> [[${user.firstName}]]</td>
-                <td> [[${user.lastName}]]</td>
-                <td> [[${user.roles}]]</td>
+                <td> [[${category.name}]]</td>
+                <td> [[${category.alias}]]</td>
                 <td>
-                    <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
-                       title="Disable this user"
+                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
+                       title="Disable this category"
                     ></a>
-                    <a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
-                       title="Enable this user"
+                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
+                       title="Enable this category"
                     ></a>
                 </td>
                 <td>
-                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
-                       title="Edit this user"> </a>
+                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/' + ${category.id}}"
+                       title="Edit this category"> </a>
                     &nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete"
-                       th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
+                    <a class="fas fa-trash fa-2x icon-dark link-delete-category" th:categoryId="${category.id}"
+                       th:href="@{'/categories/delete/' + ${category.id}}" title="Delete this category">
                     </a>
                 </td>
             </tr>
@@ -83,66 +81,33 @@
         </table>
     </div>
 
-    <div class="less-details">
-        <div th:each="user : ${listUsers}" class="row m-1">
-            <div class="col-4">
-                <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
-                     style="width: 100px"/>
-            </div>
-            <div class="col-8">
-                <div>[[${user.fullName}]] </div>
-                <div>[[${user.roles}]] </div>
-                <div class="mt-2">
-                    <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
-                       title="Disable this user"
-                    ></a>
-                    <a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
-                       title="Enable this user"
-                    ></a>
-                    &nbsp;
-                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
-                       title="Edit this user"> </a>
-                    &nbsp;&nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete"
-                       th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
-                    </a>
-                </div>
-            </div>
-
-            <div>&nbsp;</div>
-        </div>
-    </div>
-
     <div class="text-center m-1" th:if="${totalItems > 0}">
-        <span>Showing users # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+        <span>Showing categories # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
     </div>
 
     <div class="text-center m-1" th:unless="${totalItems > 0}">
-        <span>No users found</span>
+        <span>No Categories found</span>
     </div>
 
     <div th:if="${totalPages} > 1">
         <nav>
             <ul class="pagination justify-content-center">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1,'First')"></a>
+                    <a th:replace="fragments :: page_link('categories',1,'First')"></a>
                 </li>
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1},'Previous')"></a>
+                    <a th:replace="fragments :: page_link('categories',${currentPage - 1},'Previous')"></a>
                 </li>
 
                 <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="fragments :: page_link(${i},${i})"></a>
+                    <a th:replace="fragments :: page_link('categories',${i},${i})"></a>
                 </li>
 
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1},'Next')"></a>
+                    <a th:replace="fragments :: page_link('categories',${currentPage + 1},'Next')"></a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages},'Last')"></a>
+                    <a th:replace="fragments :: page_link('categories',${totalPages},'Last')"></a>
                 </li>
             </ul>
         </nav>

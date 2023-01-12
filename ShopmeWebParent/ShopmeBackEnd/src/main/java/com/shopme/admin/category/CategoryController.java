@@ -29,7 +29,7 @@ public class CategoryController {
         return listByPage(1, model, "id", "asc", null);
     }
 
-    @GetMapping("/categories/page/{pageNum")
+    @GetMapping("/categories/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
                              @Param("sortField") String sortField,
                              @Param("sortDir") String sortDir,
@@ -37,7 +37,7 @@ public class CategoryController {
         Page<Category> page = categoryService.listByPage(pageNum, sortField, sortDir, keyword);
         List<Category> listCategories = page.getContent();
 
-        long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE * 1;
+        long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE + 1;
         long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
 
         if (endCount > page.getTotalElements()) {
@@ -51,31 +51,38 @@ public class CategoryController {
         model.addAttribute("startCount", startCount);
         model.addAttribute("endCount", endCount);
         model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listUsers", listCategories);
+        model.addAttribute("listCategories", listCategories);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
 
-        return "users/users";
+        return "categories/categories";
     }
 
     @GetMapping("/categories/new")
     public String newCategories(Model model) {
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
 
-        return "categories/category_form";
+        model.addAttribute("category", new Category());
+        model.addAttribute("listCategories", listCategories);
+        model.addAttribute("pageTitle", "Create New Category");
+        return "categories/categories_form";
     }
 
     @PostMapping("/categories")
     public String saveCategories(Category category, RedirectAttributes redirectAttributes,
-                                 @RequestParam("image")MultipartFile multipartFile) throws IOException {
+                                 @RequestParam("fileImage")  MultipartFile multipartFile) throws IOException {
+
+        System.out.println("category = " + category);
+        System.out.println("multipartFile = " + multipartFile.getOriginalFilename());
 
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             category.setImage(fileName);
             Category savedCategory = categoryService.save(category);
 
-            String uploadDir = "category-photos/" + savedCategory.getId();
+            String uploadDir = "../category-images/" + savedCategory.getId();
 
             FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -85,14 +92,14 @@ public class CategoryController {
             }
             categoryService.save(category);
         }
-        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
+        redirectAttributes.addFlashAttribute("message", "The category has been saved successfully.");
 
         return getRedirectURLtoAffectedCategory(category);
     }
 
     private String getRedirectURLtoAffectedCategory(Category category) {
         Integer firstId = category.getId();
-        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstId;
+        return "redirect:/categories/page/1?sortField=id&sortDir=asc&keyword=" + firstId;
     }
 
     @GetMapping("/categories/{id}")

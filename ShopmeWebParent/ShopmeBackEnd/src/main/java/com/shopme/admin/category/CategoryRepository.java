@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
 
     @Query("SELECT c FROM Category c WHERE CONCAT(c.id, ' ', c.name, ' ', c.alias) LIKE %?1%")
@@ -16,7 +18,7 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
 
     public Long countById(Integer id);
 
-    @Query("UPDATE User u SET u.enabled = ?2 WHERE u.id = ?1")
+    @Query("UPDATE Category c SET c.enabled = ?2 WHERE c.id = ?1")
     @Modifying
     public void updateEnabledStatus(Integer id, boolean enabled);
 }
