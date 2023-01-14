@@ -35,7 +35,8 @@ public class CategoryController {
                              @Param("sortDir") String sortDir,
                              @Param("keyword") String keyword) {
         Page<Category> page = categoryService.listByPage(pageNum, sortField, sortDir, keyword);
-        List<Category> listCategories = page.getContent();
+//        List<Category> listCategories = page.getContent();
+        List<Category> listCategories = categoryService.listAll();
 
         long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE + 1;
         long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
@@ -108,7 +109,10 @@ public class CategoryController {
                                RedirectAttributes redirectAttributes) {
         try {
             Category category = categoryService.get(id);
+            List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
             model.addAttribute("category", category);
+            model.addAttribute("listCategories", listCategories);
             model.addAttribute("pageTitle", "Edit Category (ID: " + id + ")");
 
             return "categories/categories_form";

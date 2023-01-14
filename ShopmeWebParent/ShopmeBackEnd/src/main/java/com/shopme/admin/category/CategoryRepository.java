@@ -9,9 +9,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @Transactional
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
+
+    @Query("SELECT c FROM Category c WHERE c.parent.id is NULL")
+    public List<Category> findRootCategories();
 
     @Query("SELECT c FROM Category c WHERE CONCAT(c.id, ' ', c.name, ' ', c.alias) LIKE %?1%")
     public Page<Category> findAll(String keyword, Pageable pageable);

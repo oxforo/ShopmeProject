@@ -52,8 +52,7 @@
             <tr th:each="category : ${listCategories}">
                 <td> [[${category.id}]]</td>
                 <td>
-                    <span th:if="${category.image == null}" ></span>
-                    <img th:if="${category.image != null}" th:src="@{${category.categoryImagePath}}"
+                    <img th:src="@{${category.categoryImagePath}}"
                          style="width: 100px"/>
                 </td>
                 <td> [[${category.name}]]</td>
