@@ -40,11 +40,15 @@
         <table class="table table-bordered table-hover table-responsive-xl ">
             <thead class="thead-dark">
             <tr>
-                <th th:replace="fragments :: column_link('categories','id','ID', 'None')" />
+                <th>ID</th>
                 <th>Category Image</th>
-                <th th:replace="fragments :: column_link('categories','name','Category Name', 'none')" />
-                <th th:replace="fragments :: column_link('categories','alias','Alias', 'none')" />
-                <th th:replace="fragments :: column_link('categories','enabled','Enable', 'none')" />
+<!--                <th th:replace="fragments :: column_link('categories','name','Category Name', 'none')" />-->
+                <th>
+                    <a class="text-white" th:href="@{'/categories/page/' + ${pageNum} + '?sortDir=' + ${reverseSortDir}}">Category Name</a>
+                    <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th>Alias</th>
+                <th>Enabled</th>
                 <th></th>
             </tr>
             </thead>
@@ -58,85 +62,33 @@
                 <td> [[${category.name}]]</td>
                 <td> [[${category.alias}]]</td>
                 <td>
-                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
-                       title="Disable this category"
-                    ></a>
-                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
-                       title="Enable this category"
-                    ></a>
+                    <div th:replace="fragments :: category_status"></div>
                 </td>
                 <td>
-                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/' + ${category.id}}"
-                       title="Edit this category"> </a>
-                    &nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete-category" th:categoryId="${category.id}"
-                       th:href="@{'/categories/delete/' + ${category.id}}" title="Delete this category">
-                    </a>
+                    <div th:replace="fragments :: category_actions"></div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="text-center m-1" th:if="${totalItems > 0}">
-        <span>Showing categories # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
-    </div>
+    <div th:replace="fragments :: pagination('/categories', 'top-level categories')"></div>
 
-    <div class="text-center m-1" th:unless="${totalItems > 0}">
-        <span>No Categories found</span>
-    </div>
-
-    <div th:if="${totalPages} > 1">
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link('categories',1,'First')"></a>
-                </li>
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link('categories',${currentPage - 1},'Previous')"></a>
-                </li>
-
-                <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="fragments :: page_link('categories',${i},${i})"></a>
-                </li>
-
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link('categories',${currentPage + 1},'Next')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link('categories',${totalPages},'Last')"></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-
-    <div class="modal fade text-center" id="confirmModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Delete Confirmation</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body">
-                    <span id="confirmText"></span>
-                </div>
-
-                <div class="modal-footer">
-                    <a class="btn btn-success" href="" id="yesButton">Yes</a>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <div th:replace="modal_fragments :: confirm_modal"></div>
 
     <div th:replace="fragments :: footer"></div>
-
 </div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $(".link-delete").on("click", function(e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'category');
+        });
+    });
+</script>
 
 </body>
 </html>

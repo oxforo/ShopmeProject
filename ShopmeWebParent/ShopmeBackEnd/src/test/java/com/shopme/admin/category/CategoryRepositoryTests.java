@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest(showSql = false)
@@ -83,9 +83,27 @@ class CategoryRepositoryTests {
 
     @Test
     public void testListRootCategories() {
-        List<Category> rootCategories = categoryRepository.findRootCategories();
+        List<Category> rootCategories = categoryRepository.findRootCategories(Sort.by("name").ascending());
         rootCategories.forEach(category -> System.out.println("category = " + category.getName()));
     }
 
+    @Test
+    public void testFindByName() {
+        String name = "Computers";
+        Category category = categoryRepository.findByName(name);
+
+        assertThat(category).isNotNull();
+        assertThat(category.getName()).isEqualTo(name);
+    }
+
+    @Test
+    public void testFindByAlias() {
+        String alias = "electronics";
+        Category category = categoryRepository.findByAlias(alias);
+
+        assertThat(category).isNotNull();
+        assertThat(category.getAlias()).isEqualTo(alias);
+
+    }
 
 }

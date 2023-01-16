@@ -25,38 +25,32 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listFirstPage(Model model) {
-        return listByPage(1, model, "id", "asc", null);
+    public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
+        return listByPage(1, sortDir, model);
     }
 
     @GetMapping("/categories/page/{pageNum}")
-    public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
-                             @Param("sortField") String sortField,
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum,
                              @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword) {
-        Page<Category> page = categoryService.listByPage(pageNum, sortField, sortDir, keyword);
-//        List<Category> listCategories = page.getContent();
-        List<Category> listCategories = categoryService.listAll();
+                             Model model) {
 
-        long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE + 1;
-        long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
-
-        if (endCount > page.getTotalElements()) {
-            endCount = page.getTotalElements();
+        if (sortDir ==  null || sortDir.isEmpty()) {
+            sortDir = "asc";
         }
 
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
+
+        List<Category> listCategories = categoryService.listByPage(pageInfo, pageNum, sortDir);
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
         model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("startCount", startCount);
-        model.addAttribute("endCount", endCount);
-        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", "name");
+        model.addAttribute("sortField", sortDir);
+
         model.addAttribute("listCategories", listCategories);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
 
         return "categories/categories";
     }
@@ -128,6 +122,8 @@ public class CategoryController {
                              RedirectAttributes redirectAttributes) {
         try {
             categoryService.delete(id);
+            String categoryDir = "../category-images/" + id;
+            FileUploadUtil.removeDir(categoryDir);
             redirectAttributes.addFlashAttribute("message",
                     "The category ID " + id + " has been deleted successfully");
         } catch (CategoryNotFoundException e) {
@@ -143,8 +139,9 @@ public class CategoryController {
 
         categoryService.updateUserEnabledStatus(id, enabled);
         String status = enabled ? "enabled" : "disabled";
-        String message = "The user ID " + id + " has been " + status;
+        String message = "The Category ID " + id + " has been " + status;
 
+        redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/categories";
     }
 }
