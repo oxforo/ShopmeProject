@@ -99,12 +99,12 @@ public class Category {
         if (id == null || image.equals("image-thumbnail.png"))
             return "/images/image-thumbnail.png";
 
-        return "/category-images/" + this.id + "/" + this.image;
+        return "/categories-images/" + this.id + "/" + this.image;
     }
 
     @Transient
     public String getImagePath() {
-        return "/category-images/" + this.id + "/" + this.image;
+        return "/categories-images/" + this.id + "/" + this.image;
     }
 
     @Transient

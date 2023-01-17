@@ -1,6 +1,7 @@
 package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserService;
 import com.shopme.common.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,12 +27,13 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
-        return listByPage(1, sortDir, model);
+        return listByPage(1, sortDir, null, model);
     }
 
     @GetMapping("/categories/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum,
                              @Param("sortDir") String sortDir,
+                             @Param("keyword") String keyword,
                              Model model) {
 
         if (sortDir ==  null || sortDir.isEmpty()) {
@@ -39,15 +41,24 @@ public class CategoryController {
         }
 
         CategoryPageInfo pageInfo = new CategoryPageInfo();
+        List<Category> listCategories = categoryService.listByPage(pageInfo, pageNum, sortDir, keyword);
 
-        List<Category> listCategories = categoryService.listByPage(pageInfo, pageNum, sortDir);
+        long startCount = (pageNum - 1) * categoryService.ROOT_CATEGORIES_PER_PAGE + 1;
+        long endCount = startCount + categoryService.ROOT_CATEGORIES_PER_PAGE - 1;
+        if (endCount > pageInfo.getTotalElements()) {
+            endCount = pageInfo.getTotalElements();
+        }
+
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("totalPages", pageInfo.getTotalPages());
         model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("sortField", "name");
-        model.addAttribute("sortField", sortDir);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("keyword", keyword);
 
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortDir", reverseSortDir);
@@ -77,7 +88,7 @@ public class CategoryController {
             category.setImage(fileName);
             Category savedCategory = categoryService.save(category);
 
-            String uploadDir = "../category-images/" + savedCategory.getId();
+            String uploadDir = "../categories-images/" + savedCategory.getId();
 
             FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -122,7 +133,7 @@ public class CategoryController {
                              RedirectAttributes redirectAttributes) {
         try {
             categoryService.delete(id);
-            String categoryDir = "../category-images/" + id;
+            String categoryDir = "../categories-images/" + id;
             FileUploadUtil.removeDir(categoryDir);
             redirectAttributes.addFlashAttribute("message",
                     "The category ID " + id + " has been deleted successfully");
