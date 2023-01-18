@@ -16,9 +16,9 @@
 </head>
 
 <body>
-  <th th:fragment="column_link(domain, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+  <th th:fragment="column_link(moduleURL, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <a class="text-white"
-       th:href="@{'/' + ${domain} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}
+       th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}
        + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir}
        + ${keyword != null ? '&keyword=' + keyword : ''}}">
       [[${columnLabel}]]
@@ -35,15 +35,20 @@
       [[${pageLabel}]]
   </a>
 
-  <div th:fragment="category_status" th:remove="tag">
-      <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-         th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
-         title="Disable this category"
-      ></a>
+  <div th:fragment="user_photos" th:remove="tag">
+      <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+      <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
+           style="width: 100px"/>
+  </div>
 
-      <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-         th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
-         title="Enable this category"
+  <div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+      <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+         th:href="@{${entityURL} + '/enabled/false'}"
+         title="Disable this + ${entityName}"
+      ></a>
+      <a th:if="${enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+         th:href="@{${entityURL} + '/enabled/true'}"
+         title="Enable this + ${entityName}"
       ></a>
   </div>
 
