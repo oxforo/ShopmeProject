@@ -19,11 +19,9 @@
         <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark"></a>
     </div>
 
-    <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
 
-    <div th:replace="fragments :: search_form('/users/page/1')" />
+
+    <div th:replace="fragments :: search_form_and_message('/users/page/1')" />
 
     <div class="full-details">
         <table class="table table-bordered table-hover table-responsive-xl ">
@@ -71,12 +69,9 @@
                         <div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
                     </td>
                     <td>
-                        <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
-                           title="Edit this user"> </a>
-                        &nbsp;
-                        <a class="fas fa-trash fa-2x icon-dark link-delete" th:entityId="${user.id}"
-                           th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
-                        </a>
+                        <div th:replace="fragments :: edit('user', '/users/' + ${user.id})" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div th:replace="fragments :: delete('user', '/users/delete/' + ${user.id}, true, ${user.id})" />
                     </td>
                 </tr>
             </tbody>
@@ -94,12 +89,10 @@
                 <div class="mt-2">
                     <div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
                     &nbsp;
-                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/' + ${user.id}}"
-                       title="Edit this user"> </a>
-                    &nbsp;&nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete" th:entityId="${user.id}"
-                       th:href="@{'/users/delete/' + ${user.id}}" title="Delete this user">
-                    </a>
+                    <div th:replace="fragments :: edit('user', '/users/' + ${user.id})" />
+                    &nbsp;
+                    <div th:replace="fragments :: delete('user', '/users/delete/' + ${user.id}, true, ${user.id})" />
+
                 </div>
             </div>
         </div>
