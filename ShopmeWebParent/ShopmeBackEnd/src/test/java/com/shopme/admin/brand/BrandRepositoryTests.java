@@ -1,20 +1,14 @@
 package com.shopme.admin.brand;
 
-import com.shopme.admin.category.CategoryRepository;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,5 +86,14 @@ class BrandRepositoryTests {
 
         Optional<Brand> result = brandRepository.findById(id);
         assertThat(result.isEmpty());
+    }
+
+    @Test
+    public void searchCategoriesTest() {
+        Iterable<Brand> all = brandRepository.findAll();
+
+        for (Brand brand : all) {
+            System.out.println("brand = " + brand);
+        }
     }
 }

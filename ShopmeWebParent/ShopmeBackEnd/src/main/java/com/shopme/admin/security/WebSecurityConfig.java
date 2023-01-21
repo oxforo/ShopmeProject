@@ -43,6 +43,7 @@ public class WebSecurityConfig {
                                 authz
                                         .antMatchers("/users/**").hasAuthority("Admin")
                                         .antMatchers("/categories/**").hasAnyAuthority("Admin","Editor")
+                                        .antMatchers("/brands/**").hasAnyAuthority("Admin","Editor")
                                         .anyRequest().authenticated()
                                         .and()
                                         .formLogin()

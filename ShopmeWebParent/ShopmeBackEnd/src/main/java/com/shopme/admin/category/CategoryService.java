@@ -159,8 +159,6 @@ public class CategoryService {
 
     public String checkUnique(Integer id, String name, String alias) {
 
-        System.out.println("id = " + id + ", name = " + name + ", alias = " + alias);
-
         boolean isCreatingNew = (id == null || id == 0);
 
         Category categoryByName = categoryRepository.findByName(name);

@@ -2,6 +2,7 @@ package com.shopme.common.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Table(name = "brands")
 @Getter
 @Setter
+@ToString
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,7 @@ public class Brand {
     @Column(nullable = false, length = 128)
     private String logo;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "brands_categories",
             joinColumns = @JoinColumn(name = "brand_id"),
@@ -32,6 +34,23 @@ public class Brand {
 
     public Brand(String name) {
         this.name = name;
-        this.logo = "brand-logo.png";
+        this.logo = null;
     }
+
+    public Brand(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Brand() {
+    }
+
+    @Transient
+    public String getLogoPath() {
+        if (id == null || logo.equals("image-thumbnail.png"))
+            return "/images/image-thumbnail.png";
+
+        return "/brands-logos/" + this.id + "/" + this.logo;
+    }
+
 }

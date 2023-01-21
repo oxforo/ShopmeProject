@@ -127,7 +127,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id,
+    public String deleteCategory(@PathVariable(name = "id") Integer id,
                              Model model,
                              RedirectAttributes redirectAttributes) {
         try {
