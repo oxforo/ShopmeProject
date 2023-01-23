@@ -35,7 +35,7 @@
                     </li>
                 </th:block>
 
-                <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson', 'Editor')">
+                <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson', 'Editor', 'Shipper')">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/products}">Products</a>
                     </li>

@@ -44,17 +44,17 @@
   <div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
       <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
          th:href="@{${entityURL} + '/enabled/false'}"
-         title="Disable this + ${entityName}"
+         th:title="'Disable this '+ ${entityName}"
       ></a>
       <a th:if="${enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
          th:href="@{${entityURL} + '/enabled/true'}"
-         title="Enable this + ${entityName}"
+         th:title="'Enable this '+ ${entityName}"
       ></a>
   </div>
 
   <div th:fragment="edit(entityName, editURL)" th:remove="tag">
       <a class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
-         title="'Edit this ' + ${entityName}"> </a>
+         th:title="'Edit this ' + ${entityName}"> </a>
   </div>
 
   <div th:fragment="delete(entityName, deleteURL, visible, id)" th:remove="tag">
