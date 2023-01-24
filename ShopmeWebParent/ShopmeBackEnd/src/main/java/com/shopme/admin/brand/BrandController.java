@@ -79,7 +79,7 @@ public class BrandController {
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Create New Brand");
 
-        return "brands/brands_form";
+        return "brands/brand_form";
     }
 
     @PostMapping("/brands")

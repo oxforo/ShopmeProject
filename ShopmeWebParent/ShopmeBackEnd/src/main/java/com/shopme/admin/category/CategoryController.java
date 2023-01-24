@@ -72,7 +72,7 @@ public class CategoryController {
         model.addAttribute("category", new Category());
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Create New Category");
-        return "categories/categories_form";
+        return "categories/category_form";
     }
 
     @PostMapping("/categories")

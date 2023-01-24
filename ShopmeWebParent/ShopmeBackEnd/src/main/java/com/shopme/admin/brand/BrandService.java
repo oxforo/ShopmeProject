@@ -72,10 +72,8 @@ public class BrandService {
         Pageable pageable = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
 
         if (keyword != null) {
-            System.out.println("keyword not null" + brandRepository.findAll(keyword, pageable));
             return brandRepository.findAll(keyword, pageable);
         }
-        System.out.println("keyword null" + brandRepository.findAll(pageable));
         return brandRepository.findAll(pageable);
     }
 }

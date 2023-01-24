@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeLeaf.org">
 
-<head th:fragment="page_head(title)">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
     <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
@@ -40,6 +40,8 @@
       <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
            style="width: 100px"/>
   </div>
+
+  <div th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" />
 
   <div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
       <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
