@@ -5,9 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "products")
@@ -68,8 +66,15 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductImage> images = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductDetail> details = new ArrayList<>();
+
     public void addExtraImage(String imageName) {
         this.images.add(new ProductImage(imageName, this));
+    }
+
+    public void addDetail(String name, String value) {
+        this.details.add(new ProductDetail(name, value, this));
     }
 
     @Transient
