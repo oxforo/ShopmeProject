@@ -7,13 +7,21 @@ $(document).ready(function() {
     $("#shortDescription").richText();
     $("#fullDescription").richText();
 
-    getCategories();
-
     dropdownBrands.change(function() {
         dropdownCategories.empty();
         getCategories();
     });
+    getCategoriesForNewForm();
 });
+function getCategoriesForNewForm() {
+    categoryIdField = $("#categoryId");
+    editMode = false;
+    if (categoryIdField.length) {
+        editMode = true;
+    }
+
+    if (!editMode) getCategories();
+}
 
 function getCategories() {
     brandId = dropdownBrands.val();

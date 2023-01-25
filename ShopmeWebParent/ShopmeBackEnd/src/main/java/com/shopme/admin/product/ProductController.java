@@ -53,8 +53,8 @@ public class ProductController {
 
     @PostMapping("/products")
     public String saveProduct(Product product, RedirectAttributes redirectAttributes,
-                              @RequestParam("fileImage")MultipartFile mainImageMultipart,
-                              @RequestParam("extraImage")MultipartFile[] extraImageMultiparts,
+                              @RequestParam("fileImage") MultipartFile mainImageMultipart,
+                              @RequestParam("extraImage") MultipartFile[] extraImageMultiparts,
                               @RequestParam(name = "detailNames", required = false) String[] detailNames,
                               @RequestParam(name = "detailValues", required = false) String[] detailValues)
             throws IOException {
@@ -142,8 +142,8 @@ public class ProductController {
 
     @GetMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable(name = "id") Integer id,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
         try {
             productService.delete(id);
             String productExtraImagesDir = "../products-images/" + id + "/extras";
@@ -160,4 +160,23 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    @GetMapping("/products/{id}")
+    public String editProduct(@PathVariable("id") Integer id, Model model,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            Product product = productService.get(id);
+            List<Brand> listBrands = brandService.listAll();
+            Integer numberOfExistingExtraImages = product.getImages().size();
+
+            model.addAttribute("product", product);
+            model.addAttribute("listBrands", listBrands);
+            model.addAttribute("pageTitle", "Edit Product (ID: " + id + ")");
+            model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
+
+            return "products/product_form";
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/products";
+        }
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +67,13 @@ public class ProductService {
             throw new ProductNotFoundException("Could not find any category with ID " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    public Product get(Integer id) throws ProductNotFoundException {
+        try {
+            return productRepository.findById(id).get();
+        } catch (NoSuchElementException e) {
+            throw new ProductNotFoundException("Colud not find any product with ID " + id);
+        }
     }
 }
