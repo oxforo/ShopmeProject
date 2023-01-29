@@ -2,6 +2,7 @@ package com.shopme.admin.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,9 +43,27 @@ public class WebSecurityConfig {
                             try {
                                 authz
                                         .antMatchers("/users/**").hasAuthority("Admin")
-                                        .antMatchers("/categories/**").hasAnyAuthority("Admin","Editor")
-                                        .antMatchers("/brands/**").hasAnyAuthority("Admin","Editor")
-                                        .antMatchers("/products/**").hasAnyAuthority("Admin","Editor","Salesperson","Shipper")
+                                        .antMatchers("/brands/**").hasAnyAuthority("Admin", "Editor")
+                                        .antMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
+
+                                        // create, delete - admin & editor
+                                        .antMatchers("/products/new", "/products/delete/**")
+                                        .hasAnyAuthority("Admin", "Editor")
+
+                                        // update - admin & editor & salesperson
+                                        .antMatchers("/products/{\\d+}", "/products/check_unique")
+                                            .hasAnyAuthority("Admin", "Editor", "Salesperson")
+                                        .antMatchers(HttpMethod.POST, "/products")
+                                            .hasAnyAuthority("Admin", "Editor", "Salesperson")
+
+                                        // show list
+                                        .antMatchers(HttpMethod.GET,"/products")
+                                            .hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+                                        .antMatchers("/products/", "/products/detail/**", "/products/page/**")
+                                            .hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+
+                                        .antMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
+
                                         .anyRequest().authenticated()
                                         .and()
                                         .formLogin()

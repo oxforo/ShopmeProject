@@ -3,6 +3,7 @@ package com.shopme.admin.product;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.brand.BrandService;
 import com.shopme.admin.category.CategoryService;
+import com.shopme.admin.security.ShopmeUserDetails;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Product;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -56,8 +58,6 @@ public class ProductController {
             sortDir = "asc";
         }
 
-        System.out.println("categoryId = " + categoryId);
-
         Page<Product> page = productService.listByPage(pageNum, sortField, sortDir, keyword, categoryId);
         List<Product> listProducts = page.getContent();
         List<Category> listCategories = categoryService.listCategoriesUsedInForm();
@@ -99,21 +99,30 @@ public class ProductController {
         model.addAttribute("product", product);
         model.addAttribute("listBrands", listBrands);
         model.addAttribute("pageTitle", "Create New Product");
+        model.addAttribute("numberOfExistingExtraImages", 0);
 
         return "products/product_form";
     }
 
     @PostMapping("/products")
     public String saveProduct(Product product, RedirectAttributes redirectAttributes,
-                              @RequestParam("fileImage") MultipartFile mainImageMultipart,
-                              @RequestParam("extraImage") MultipartFile[] extraImageMultiparts,
+                              @RequestParam(name = "fileImage", required = false) MultipartFile mainImageMultipart,
+                              @RequestParam(name = "extraImage", required = false) MultipartFile[] extraImageMultiparts,
                               @RequestParam(name = "detailIDs", required = false) String[] detailIDs,
                               @RequestParam(name = "detailNames", required = false) String[] detailNames,
                               @RequestParam(name = "detailValues", required = false) String[] detailValues,
                               @RequestParam(name = "imageIDs", required = false) String[] imageIDs,
-                              @RequestParam(name = "imageNames", required = false) String[] imageNames
+                              @RequestParam(name = "imageNames", required = false) String[] imageNames,
+                              @AuthenticationPrincipal ShopmeUserDetails loggedUser
                               )
             throws IOException {
+
+        if (loggedUser.hasRole("Salesperson")) {
+            productService.saveProductPrice(product);
+            redirectAttributes.addFlashAttribute("message", "The product has been saved successfully.");
+
+            return "redirect:/products";
+        }
 
         setMainImageName(mainImageMultipart, product);
         setExistingExtraImageNames(imageIDs, imageNames, product);

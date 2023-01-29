@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -81,5 +82,18 @@ public class User {
     @Transient
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    public boolean hasRole(String roleName) {
+        Iterator<Role> iterator = roles.iterator();
+
+        while (iterator.hasNext()) {
+            Role role = iterator.next();
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
