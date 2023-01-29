@@ -9,23 +9,54 @@
     <div th:replace="navigation :: menu"></div>
 
     <div>
-        <h2>Manage brands</h2>
+        <h2>Manage Products</h2>
         <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
         &nbsp;&nbsp;
         <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
     </div>
 
-    <div th:replace="fragments :: search_form_and_message('/products/page/1')" />
+    <div>
+        <form th:action="@{/products/page/1}" class="form-inline m-3" id="searchForm">
+            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+            Category: &nbsp;
+            <select class="form-control" name="categoryId" id="dropdownCategory">
+                <option value="0">All Categories</option>
+                <th:block th:each="cat : ${listCategories}">
+                    <option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+
+                </th:block>
+            </select>
+            &nbsp;
+            Filter: &nbsp;
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" value="Search" class="btn btn-primary" >
+                <i class="fas fa-search"></i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()" >
+                <i class="fas fa-eraser"></i>
+            </button>
+        </form>
+
+        <div th:if="${message != null}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
+    </div>
+
+
 
     <div class="full-details">
         <table class="table table-bordered table-hover table-responsive-xl ">
             <thead class="thead-dark">
             <tr>
-                <th>ID</th>
+                <th th:replace="fragments :: column_link('/products','id','ID', 'None')" />
                 <th>Main Image</th>
-                <th>Product Name</th>
-                <th>Brand</th>
-                <th>Category</th>
+                <th th:replace="fragments :: column_link('/products','name','Product Name', 'None')" />
+                <th th:replace="fragments :: column_link('/products','brand','Brand', 'None')" />
+                <th th:replace="fragments :: column_link('/products','category','Category', 'None')" />
                 <th>Enabled</th>
                 <th></th>
             </tr>
@@ -39,8 +70,8 @@
                 <td>
                     <a class="link-detail"
                        th:href="@{'/products/detail/' + ${product.id}}"
-                       title="View details of this product"
-                    >[[${product.name}]]</a>
+                       th:title="${product.name}"
+                    >[[${product.shortName}]]</a>
                 </td>
                 <td> [[${product.brand.name}]]</td>
                 <td> [[${product.category.name}]]</td>
@@ -71,6 +102,8 @@
         </div>
     </div>
 
+    <div th:replace="fragments :: pagination('/products', 'products')"></div>
+
     <div th:replace="fragments :: footer"></div>
 </div>
 
@@ -80,15 +113,15 @@
     moduleURL = "[[@{/products}]]";
 
     $(document).ready(function() {
-        $(".link-delete").on("click", function(e) {
-            e.preventDefault();
-            showDeleteConfirmModal($(this), 'brand');
-        });
 
         $(".link-detail").on("click", function(e) {
             e.preventDefault();
             linkDetailURL = $(this).attr("href");
             $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        })
+
+        $("#dropdownCategory").on("change", function () {
+            $("#searchForm").submit();
         })
     });
 </script>

@@ -28,9 +28,13 @@ public class Category {
 
     private boolean enabled;
 
+    @Column(name = "all_parent_ids", length = 256, nullable = true)
+    private String allParentIDs;
+
     @OneToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
+
 
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
@@ -109,4 +113,6 @@ public class Category {
 
     @Transient
     private boolean hasChildren;
+
+
 }
