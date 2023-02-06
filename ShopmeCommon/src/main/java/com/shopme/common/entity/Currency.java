@@ -32,4 +32,10 @@ public class Currency {
 
     public Currency() {
     }
+
+    @Override
+    public String toString() {
+        return name + " - " + code + " - " + symbol;
+    }
+
 }

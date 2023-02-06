@@ -10,6 +10,7 @@ import org.springframework.test.annotation.Rollback;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -38,5 +39,14 @@ class CurrencyRepositoryTests {
         );
 
         currencyRepository.saveAll(listCurrencies);
+    }
+
+    @Test
+    public void testListAllOrderByNameAsc() {
+        List<Currency> currencies = currencyRepository.findAllByOrderByNameAsc();
+
+        currencies.forEach(System.out::println);
+
+        assertThat(currencies.size()).isGreaterThan(0);
     }
 }
