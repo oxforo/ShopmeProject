@@ -1,5 +1,6 @@
-package com.shopme.admin.currency;
+package com.shopme.admin.setting;
 
+import com.shopme.admin.setting.CurrencyRepository;
 import com.shopme.common.entity.Currency;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

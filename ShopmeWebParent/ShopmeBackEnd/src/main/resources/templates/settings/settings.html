@@ -17,6 +17,10 @@
         <h2>Site Settings</h2>
     </div>
 
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
     <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" id="settingTab" role="tablist">
@@ -64,15 +68,7 @@
 </div>
 <script type="text/javascript">
     MAX_FILE_SIZE = 502400; // 500KB
-
-    moduleURL = "[[@{/products}]]";
-    brandModuleURL = "[[@{/brands}]]";
-    defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]";
-    checkUniqueUrl = "[[@{/products/check_unique}]]";
 </script>
 <script th:src="@{/js/common_form.js}"></script>
-<script th:src="@{/js/product_form_overview.js}"></script>
-<script th:src="@{/js/product_form_images.js}"></script>
-<script th:src="@{/js/product_form_details.js}"></script>
 </body>
 </html>

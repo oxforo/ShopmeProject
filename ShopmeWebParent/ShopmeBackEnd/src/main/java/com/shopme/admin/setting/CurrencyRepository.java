@@ -1,4 +1,4 @@
-package com.shopme.admin.currency;
+package com.shopme.admin.setting;
 
 import com.shopme.common.entity.Currency;
 import org.springframework.data.repository.CrudRepository;
