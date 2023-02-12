@@ -1,8 +1,8 @@
 package com.shopme.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 public class Country {
 
     @Id
@@ -31,6 +30,10 @@ public class Country {
     public Country() {
     }
 
+    public Country(Integer id) {
+        this.id = id;
+    }
+
     public Country(String name, String code) {
         this.name = name;
         this.code = code;
@@ -41,4 +44,11 @@ public class Country {
         this.name = name;
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "Country [id=" + id + ", name=" + name + ", code=" + code + "]";
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import com.fasterxml.jackson.annotation .JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +26,13 @@ public class State {
     public State(String name, Country country) {
         this.name = name;
         this.country = country;
+    }
+
+    public State(String name) {
+        this.name = name;
+    }
+
+    public State() {
+
     }
 }
