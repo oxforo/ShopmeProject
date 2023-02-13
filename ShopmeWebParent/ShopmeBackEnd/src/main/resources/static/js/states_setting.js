@@ -51,10 +51,15 @@ function deleteState() {
 
     url = contextPath + "states/delete/" + stateId;
 
-    $.get(url, function() {
+    $.ajax({
+        type: 'DELETE',
+        url: url,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(csrfHeaderName, csrfValue);
+        },
+    }).done(function() {
         $("#dropDownStates option[value='" + stateId + "']").remove();
         changeFormStateToNew();
-    }).done(function() {
         showToastMessage("The state has been deleted");
     }).fail(function() {
         showToastMessage("ERROR: Could not connect to server or server encountered an error");
@@ -170,7 +175,6 @@ function loadStates4Country() {
         $.each(responseJson, function(index, state) {
             $("<option>").val(state.id).text(state.name).appendTo(dropDownStates);
         });
-
     }).done(function() {
         changeFormStateToNew();
         showToastMessage("All states have been loaded for country " + selectedCountry.text());

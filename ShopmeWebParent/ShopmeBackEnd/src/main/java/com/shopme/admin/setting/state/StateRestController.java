@@ -28,13 +28,13 @@ public class StateRestController {
 
     @PostMapping("/states/save")
     public String save(@RequestBody State state) {
-        System.out.println("state = " + state);
+        System.out.println("state = " + state.toString());
         State savedState = stateRepository.save(state);
 
         return String.valueOf(savedState.toString());
     }
 
-    @GetMapping("/states/delete/{id}")
+    @DeleteMapping("/states/delete/{id}")
     public void delete(@PathVariable("id") Integer id) {
         stateRepository.deleteById(id);
     }

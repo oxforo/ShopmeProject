@@ -24,9 +24,10 @@ public class Country {
     @Column(nullable = false, length = 5)
     private String code;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "country")
     private Set<State> states = new HashSet<>();
-
     public Country() {
     }
 

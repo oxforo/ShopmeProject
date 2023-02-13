@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
-                                        .antMatchers("/users/**").hasAuthority("Admin")
+                                        .antMatchers("/users/**", "/settings/**", "/countries/**", "/states/**").hasAuthority("Admin")
                                         .antMatchers("/brands/**").hasAnyAuthority("Admin", "Editor")
                                         .antMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
 
