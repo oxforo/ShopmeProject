@@ -92,4 +92,23 @@ public class SettingController {
         settingService.saveAll(listSettings);
     }
 
+    @PostMapping("/settings/save_mail_server")
+    public String saveMailServerSettings(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        List<Setting> mailServerSettings = settingService.getMailServerSettings();
+        updateSettingValuesFromForm(request, mailServerSettings);
+
+        redirectAttributes.addFlashAttribute("message", "Mail server settings have saved");
+
+        return "redirect:/settings";
+    }
+
+    @PostMapping("/settings/save_mail_templates")
+    public String saveMailTemplateSettings(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        List<Setting> mailTemplateSettings = settingService.getMailTemplateSettings();
+        updateSettingValuesFromForm(request, mailTemplateSettings);
+
+        redirectAttributes.addFlashAttribute("message", "Mail template settings have saved");
+
+        return "redirect:/settings";
+    }
 }
