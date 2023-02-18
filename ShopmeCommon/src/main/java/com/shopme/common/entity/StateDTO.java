@@ -1,4 +1,4 @@
-package com.shopme.admin.setting.state;
+package com.shopme.common.entity;
 
 import lombok.Getter;
 import lombok.Setter;
