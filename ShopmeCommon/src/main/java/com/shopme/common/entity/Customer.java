@@ -62,4 +62,8 @@ public class Customer {
 
     public Customer() {
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

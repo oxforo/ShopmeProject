@@ -15,7 +15,7 @@ $(document).ready(function () {
     buttonUpdateState = $("#buttonUpdateState");
     buttonDeleteState = $("#buttonDeleteState");
     labelStateName = $("#labelStateName");
-    fieldStateName = $("#fieldStateCode")
+    fieldStateName = $("#fieldStateName")
 
     buttonLoad4States.click(function () {
         loadCountries4States();
@@ -67,6 +67,9 @@ function deleteState() {
 }
 
 function updateState() {
+
+    if (!validateFormState()) return;
+
     url = contextPath + "states/save";
     stateId = dropDownStates.val();
     stateName = fieldStateName.val();
@@ -94,7 +97,19 @@ function updateState() {
     });
 }
 
+function validateFormState() {
+    formState = document.getElementById("formState");
+    if (!formState.checkValidity()) {
+        formState.reportValidity();
+        return;
+    }
+    return true;
+}
+
 function addState() {
+
+    if (!validateFormState()) return;
+
     url = contextPath + "states/save";
     stateName = fieldStateName.val();
 
