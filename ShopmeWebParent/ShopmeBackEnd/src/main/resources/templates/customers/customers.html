@@ -16,26 +16,36 @@
         </div>
     </div>
 
-    <div th:replace="fragments :: search_form_and_message('/customers/page/1')" />
+    <div th:replace="fragments :: search_form_and_message" />
 
     <div class="full-details">
         <table class="table table-bordered table-hover table-responsive-xl ">
             <thead class="thead-dark">
                 <tr>
-                    <th th:replace="fragments :: column_link('/customers','id','ID', 'tag')" />
-                    <th th:replace="fragments :: column_link('/customers','firstName','First Name', 'tag')" />
-                    <th th:replace="fragments :: column_link('/customers','lastName','Last Name', 'tag')" />
-                    <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('/customers','email','E-mail', 'tag')" />
+                    <th>
+                        <th th:replace="fragments :: column_link('id','ID', 'tag')" />
+                    </th>
+                    <th>
+                        <th th:replace="fragments :: column_link('firstName','First Name', 'tag')" />
+                    </th>
+                    <th>
+                        <th th:replace="fragments :: column_link('lastName','Last Name', 'tag')" />
                     </th>
                     <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('/customers','city','City', 'tag')" />
+                        <th th:replace="fragments :: column_link('email','E-mail', 'tag')" />
                     </th>
                     <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('/customers','state','State', 'tag')" />
+                        <th th:replace="fragments :: column_link('city','City', 'tag')" />
                     </th>
-                    <th th:replace="fragments :: column_link('/customers','country','Country', 'tag')" />
-                    <th th:replace="fragments :: column_link('/customers','enabled','Enabled', 'tag')" />
+                    <th class="hideable-column">
+                        <th th:replace="fragments :: column_link('state','State', 'tag')" />
+                    </th>
+                    <th>
+                        <th th:replace="fragments :: column_link('country','Country', 'tag')" />
+                    </th>
+                    <th>
+                        <th th:replace="fragments :: column_link('enabled','Enabled', 'tag')" />
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -47,7 +57,7 @@
                     <td class="hideable-column">[[${customer.email}]]</td>
                     <td class="hideable-column">[[${customer.city}]]</td>
                     <td class="hideable-column">[[${customer.state}]]</td>
-                    <td>[[${customer.country}]]</td>
+                    <td>[[${customer.country.name}]]</td>
                     <td>
                         <div th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
                     </td>
@@ -66,7 +76,7 @@
         </table>
     </div>
 
-    <div th:replace="fragments :: pagination('/customers', 'customers')"></div>
+    <div th:replace="fragments :: pagination('customers')"></div>
 
     <div th:replace="modal_fragments :: confirm_modal"></div>
 

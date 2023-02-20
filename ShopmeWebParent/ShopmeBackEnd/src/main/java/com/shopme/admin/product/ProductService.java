@@ -1,5 +1,6 @@
 package com.shopme.admin.product;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,27 +27,27 @@ public class ProductService {
         return (List<Product>) productRepository.findAll();
     }
 
-    public Page<Product> listByPage(int pageNum, String sortField, String sortDir, String keyword, Integer categoryId) {
+    public void listByPage(int pageNum, PagingAndSortingHelper helper, Integer categoryId) {
 
-        Sort sort = Sort.by(sortField);
-        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
-
+        Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+        String keyword = helper.getKeyword();
+        Page<Product> page = null;
 
         if (keyword != null && !keyword.isEmpty()) {
             if (categoryId != null && categoryId > 0) {
                 String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-                return productRepository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+                page = productRepository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+            } else {
+                page = productRepository.findAll(keyword, pageable);
             }
-            return productRepository.findAll(keyword, pageable);
+        } else {
+            if (categoryId != null && categoryId > 0) {
+                String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+                page = productRepository.findAllInCategory(categoryId, categoryIdMatch, pageable);
+            } else {
+                page = productRepository.findAll(pageable);
+            }
         }
-
-        if (categoryId != null && categoryId > 0) {
-            String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-            return productRepository.findAllInCategory(categoryId, categoryIdMatch, pageable);
-        }
-        return productRepository.findAll(pageable);
     }
 
     public Product save(Product product) {

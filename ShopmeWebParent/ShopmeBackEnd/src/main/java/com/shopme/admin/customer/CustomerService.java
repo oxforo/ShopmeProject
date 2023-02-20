@@ -69,13 +69,20 @@ public class CustomerService {
     }
 
     public void save(Customer customerInForm) {
+        Customer customerInDB = customerRepository.findById(customerInForm.getId()).get();
+
+
         if (!customerInForm.getPassword().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(customerInForm.getPassword());
             customerInForm.setPassword(encodedPassword);
         } else {
-            Customer customerInDB = customerRepository.findById(customerInForm.getId()).get();
             customerInDB.setPassword(customerInDB.getPassword());
         }
+
+        customerInForm.setEnabled(customerInDB.isEnabled());
+        customerInForm.setCreatedTime(customerInDB.getCreatedTime());
+        customerInForm.setVerificationCode(customerInDB.getVerificationCode());
+
         customerRepository.save(customerInForm);
     }
     public void delete(Integer id) throws CustomerNotFoundException {

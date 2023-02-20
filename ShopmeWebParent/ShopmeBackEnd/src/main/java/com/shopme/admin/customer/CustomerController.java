@@ -64,6 +64,7 @@ public class CustomerController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleURL", "/customers");
 
         return "customers/customers";
     }
@@ -90,7 +91,20 @@ public class CustomerController {
         return "redirect:/customers";
     }
 
-    @GetMapping("/customers/edit/{id}")
+    @GetMapping("/customers/detail/{id}")
+    public String viewCustomer(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Customer customer = customerService.get(id);
+            model.addAttribute("customer", customer);
+
+            return "customers/customer_detail_modal";
+        } catch (CustomerNotFoundException exception) {
+            redirectAttributes.addFlashAttribute("message", exception.getMessage());
+            return "redirect:/customers";
+        }
+    }
+
+    @GetMapping("/customers/{id}")
     public String editCustomer(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Customer customer = customerService.get(id);

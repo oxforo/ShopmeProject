@@ -1,14 +1,17 @@
 package com.shopme.admin;
 
+import com.shopme.admin.paging.PagingAndSortingArgumentResolver;
 import com.shopme.admin.setting.GeneralSettingBag;
 import com.shopme.common.entity.Currency;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -32,5 +35,10 @@ public class MvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler(logicalPath)
                 .addResourceLocations("file:" + absolutePath + "/");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new PagingAndSortingArgumentResolver());
     }
 }
