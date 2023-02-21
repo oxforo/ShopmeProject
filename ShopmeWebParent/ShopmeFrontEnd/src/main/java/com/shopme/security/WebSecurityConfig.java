@@ -2,8 +2,6 @@ package com.shopme.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,8 +16,22 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Bean
+    public UserDetailsService customerDetailsService() {
+        return new ShopmeCustomerDetailsService();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customerDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
     }
 
     @Bean
@@ -28,12 +40,26 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
-                                        .anyRequest().permitAll();
+//                                        .anyRequest().permitAll();
+                                        .anyRequest().authenticated()
+                                        .and()
+                                        .formLogin()
+                                        .loginPage("/login")
+                                        .usernameParameter("email")
+                                        .permitAll()
+                                        .and().logout().permitAll()
+                                        .and()
+                                        .rememberMe()
+                                        .key("ABCDEFGHIJKLMNOPQR_1234567890")
+                                        .tokenValiditySeconds(7 * 24 * 60 * 60);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                 );
+
+        http.authenticationProvider(authenticationProvider());
+
         return http.build();
     }
 
