@@ -17,7 +17,7 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService customerDetailsService() {
-        return new ShopmeCustomerDetailsService();
+        return new CustomerUserDetailsService();
     }
 
     @Bean
@@ -40,18 +40,19 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
-//                                        .anyRequest().permitAll();
-                                        .anyRequest().authenticated()
+                                        .antMatchers("/customer").authenticated()
+                                        .anyRequest().permitAll()
                                         .and()
                                         .formLogin()
-                                        .loginPage("/login")
-                                        .usernameParameter("email")
-                                        .permitAll()
-                                        .and().logout().permitAll()
+                                            .loginPage("/login")
+                                            .usernameParameter("email")
+                                            .permitAll()
                                         .and()
-                                        .rememberMe()
-                                        .key("ABCDEFGHIJKLMNOPQR_1234567890")
-                                        .tokenValiditySeconds(7 * 24 * 60 * 60);
+                                            .logout().permitAll()
+                                        .and()
+                                            .rememberMe()
+                                            .key("ABCDEFGHIJKLMNOPQR_1234567890")
+                                            .tokenValiditySeconds(14 * 24 * 60 * 60);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

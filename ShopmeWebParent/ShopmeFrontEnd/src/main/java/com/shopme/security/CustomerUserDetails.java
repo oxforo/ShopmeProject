@@ -1,32 +1,22 @@
 package com.shopme.security;
 
 import com.shopme.common.entity.Customer;
-import com.shopme.common.entity.Role;
-import com.shopme.common.entity.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-public class ShopmeCustomerDetails implements UserDetails {
+public class CustomerUserDetails implements UserDetails {
 
     private Customer customer;
 
-    public ShopmeCustomerDetails(Customer customer) {
+    public CustomerUserDetails(Customer customer) {
         this.customer = customer;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        return authorities;
+        return null;
     }
 
     @Override
@@ -59,4 +49,7 @@ public class ShopmeCustomerDetails implements UserDetails {
         return customer.isEnabled();
     }
 
+    public String getFullName() {
+        return customer.getFirstName() + " " + customer.getLastName();
+    }
 }

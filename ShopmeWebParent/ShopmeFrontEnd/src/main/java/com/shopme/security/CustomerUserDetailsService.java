@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-public class ShopmeCustomerDetailsService implements UserDetailsService {
+public class CustomerUserDetailsService implements UserDetailsService {
 
     @Autowired
     private CustomerRepository CustomerRepository;
@@ -16,10 +16,10 @@ public class ShopmeCustomerDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Customer customer = CustomerRepository.findByEmail(email);
-        if (customer != null) {
-            return new ShopmeCustomerDetails(customer);
+        if (customer == null) {
+            throw new UsernameNotFoundException("No customer found with the email " + email);
         }
+        return new CustomerUserDetails(customer);
 
-        throw new UsernameNotFoundException("Could not find customer with email: " + email);
     }
 }
