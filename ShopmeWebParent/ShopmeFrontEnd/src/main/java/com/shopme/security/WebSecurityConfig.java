@@ -20,6 +20,7 @@ public class WebSecurityConfig {
 
     @Autowired private CustomerOAuth2UserService oAuth2UserService;
     @Autowired private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    @Autowired private DataBaseLoginSuccessHandler dataBaseLoginSuccessHandler;
 
     @Bean
     public UserDetailsService customerDetailsService() {
@@ -52,6 +53,7 @@ public class WebSecurityConfig {
                                         .formLogin()
                                             .loginPage("/login")
                                             .usernameParameter("email")
+                                            .successHandler(dataBaseLoginSuccessHandler)
                                             .permitAll()
                                         .and()
                                         .oauth2Login()

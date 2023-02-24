@@ -10,6 +10,6 @@ public interface CountryRepository extends CrudRepository<Country, Integer> {
 
     public List<Country> findAllByOrderByNameAsc();
 
-    @Query("SELECT c FROM Country WHERE c.code = ?1")
+    @Query("SELECT c FROM Country c WHERE c.code = ?1")
     public Country findByCode(String code);
 }

@@ -3,6 +3,8 @@ server:
     servlet:
         context-path: /Shopme
 spring:
+    main:
+        allow-circular-references: true
     datasource:
         password: password
         url: jdbc:mysql://localhost:3306/shopmedb
@@ -24,5 +26,11 @@ spring:
                       client-id: 992914229712-jc1ul4ebjvpvjs4dl41c6kditnke8gsh.apps.googleusercontent.com
                       client-secret: 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
                       scope:
-                          - email
-                          - profile
+                      - email
+                      - profile
+                  facebook:
+                      client-id: 101627836188048
+                      client-secret: efda2f84d74de579c969d0ccfbb89b0a
+                      scope:
+                      - email
+                      - public_profile

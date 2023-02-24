@@ -8,10 +8,12 @@ import java.util.Map;
 
 public class CustomerOAuth2User implements OAuth2User {
 
+    private String clientName;
     private OAuth2User oAuth2User;
 
-    public CustomerOAuth2User(OAuth2User user) {
+    public CustomerOAuth2User(OAuth2User user, String clientName) {
         this.oAuth2User = user;
+        this.clientName = clientName;
     }
     @Override
     public Map<String, Object> getAttributes() {
@@ -36,4 +38,7 @@ public class CustomerOAuth2User implements OAuth2User {
         return oAuth2User.getAttribute("name");
     }
 
+    public String getClientName() {
+        return clientName;
+    }
 }
