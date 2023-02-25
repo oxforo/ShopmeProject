@@ -84,4 +84,9 @@ public class CustomerController {
 
         return "register/" + (verified ? "verified_success" : "verified_fail");
     }
+
+    @GetMapping("/account_details")
+    public String viewAccountDetails(Model model) {
+        return "customer/account_form";
+    }
 }
