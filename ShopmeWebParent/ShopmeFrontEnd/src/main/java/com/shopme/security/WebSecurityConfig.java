@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
-                                        .antMatchers("/customer").authenticated()
+                                        .antMatchers("/account_details").authenticated()
                                         .anyRequest().permitAll()
                                         .and()
                                         .formLogin()
