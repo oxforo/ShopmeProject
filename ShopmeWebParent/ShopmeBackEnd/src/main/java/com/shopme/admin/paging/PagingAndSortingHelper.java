@@ -29,6 +29,7 @@ public class PagingAndSortingHelper {
         this.sortField = sortField;
         this.sortDir = sortDir;
         this.keyword = keyword;
+
     }
     public void updateModelAttributes(int pageNum, Page<?> page) {
         List<?> listItems = page.getContent();

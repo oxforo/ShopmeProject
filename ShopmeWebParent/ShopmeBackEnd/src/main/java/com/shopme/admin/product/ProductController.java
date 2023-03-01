@@ -36,7 +36,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public String listAll(Model model) {
-        return "redirect:/product/page/1?sortField=name&sortDir=asc";
+        return "redirect:/products/page/1?sortField=name&sortDir=asc&categoryId=0";
     }
 
     @GetMapping("/products/page/{pageNum}")
@@ -144,12 +144,22 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public String editProduct(@PathVariable("id") Integer id, Model model,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes,
+                              @AuthenticationPrincipal ShopmeUserDetails loggedUser) {
         try {
             Product product = productService.get(id);
             List<Brand> listBrands = brandService.listAll();
             Integer numberOfExistingExtraImages = product.getImages().size();
 
+            boolean isReadOnlyForSalesperson = false;
+
+            if (!loggedUser.hasRole("Admin")&& !loggedUser.hasRole("Editor")) {
+                if (loggedUser.hasRole("Salesperson")){
+                    isReadOnlyForSalesperson = true;
+                }
+            }
+
+            model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
             model.addAttribute("product", product);
             model.addAttribute("listBrands", listBrands);
             model.addAttribute("pageTitle", "Edit Product (ID: " + id + ")");

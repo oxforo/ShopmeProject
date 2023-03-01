@@ -48,6 +48,8 @@ public class ProductService {
                 page = productRepository.findAll(pageable);
             }
         }
+
+        helper.updateModelAttributes(pageNum, page);
     }
 
     public Product save(Product product) {
