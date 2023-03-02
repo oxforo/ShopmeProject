@@ -70,6 +70,10 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(Integer id) {
+        this.id = id;
+    }
+
     public String getFullName() {
         return firstName + " " + lastName;
     }
