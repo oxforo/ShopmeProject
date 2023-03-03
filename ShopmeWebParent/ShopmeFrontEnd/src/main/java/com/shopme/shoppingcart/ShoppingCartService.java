@@ -6,12 +6,14 @@ import com.shopme.common.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShoppingCartService {
 
     @Autowired private CartItemRepository cartItemRepository;
 
-    public Integer addProduct(Integer productId, Integer quantity, Customer customer) {
+    public Integer addProduct(Integer productId, Integer quantity, Customer customer) throws ShoppingCartException {
         Integer updatedQuantity = quantity;
         Product product = new Product(productId);
 
@@ -19,6 +21,12 @@ public class ShoppingCartService {
 
         if (cartItem != null) {
             updatedQuantity = cartItem.getQuantity() + quantity;
+
+            if (updatedQuantity > 5) {
+                throw new ShoppingCartException("Could not add more" + quantity + " items(s)"
+                        + " because there's already " + cartItem.getQuantity() + " item(s) "
+                        + "in your shopping cart. Maximum allowed quantity is 5.");
+            }
         } else {
             cartItem = new CartItem();
             cartItem.setCustomer(customer);
@@ -29,5 +37,9 @@ public class ShoppingCartService {
         cartItemRepository.save(cartItem);
 
         return updatedQuantity;
+    }
+
+    public List<CartItem> listCartItems(Customer customer) {
+        return cartItemRepository.findByCustomer(customer);
     }
 }
