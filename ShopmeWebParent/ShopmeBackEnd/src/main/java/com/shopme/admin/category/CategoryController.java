@@ -4,7 +4,6 @@ import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.Category;
 import com.shopme.common.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -26,14 +25,14 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
-        return listByPage(1, sortDir, null, model);
+    public String listFirstPage() {
+        return "redirect:/categories/page/1?sortField=name&sortDir=asc";
     }
 
     @GetMapping("/categories/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum,
-                             @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword,
+                             @RequestParam(value = "sortDir", required = false) String sortDir,
+                             @RequestParam(value = "keyword", required = false) String keyword,
                              Model model) {
 
         if (sortDir ==  null || sortDir.isEmpty()) {
@@ -59,6 +58,7 @@ public class CategoryController {
         model.addAttribute("sortField", "name");
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleURL", "/categories");
 
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortDir", reverseSortDir);
@@ -129,8 +129,7 @@ public class CategoryController {
 
     @GetMapping("/categories/delete/{id}")
     public String deleteCategory(@PathVariable(name = "id") Integer id,
-                             Model model,
-                             RedirectAttributes redirectAttributes) {
+                                 RedirectAttributes redirectAttributes) {
         try {
             categoryService.delete(id);
             String categoryDir = "../categories-images/" + id;

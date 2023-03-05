@@ -8,7 +8,6 @@ import com.shopme.security.oauth.CustomerOAuth2User;
 import com.shopme.setting.EmailSettingBag;
 import com.shopme.setting.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
@@ -85,7 +84,7 @@ public class CustomerController {
     }
 
     @GetMapping("/verify")
-    public String verifyAccount(@Param("code") String code, Model model) {
+    public String verifyAccount(String code) {
         boolean verified = customerService.verify(code);
 
         return "register/" + (verified ? "verified_success" : "verified_fail");
@@ -107,7 +106,7 @@ public class CustomerController {
 
 
     @PostMapping("/update_account_details")
-    public String updateAccountDetails(Model model, Customer customer, RedirectAttributes redirectAttributes
+    public String updateAccountDetails(Customer customer, RedirectAttributes redirectAttributes
             , HttpServletRequest request) {
         customerService.update(customer);
         redirectAttributes.addFlashAttribute("message", "Your account details have been update.");

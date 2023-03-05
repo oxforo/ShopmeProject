@@ -6,7 +6,6 @@ import com.shopme.common.entity.Customer;
 import com.shopme.common.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +29,7 @@ public class CustomerController {
 
     @GetMapping("/customers/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
-                             @Param("sortField") String sortField,
-                             @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword
-    ) {
+                             String sortField, String sortDir, String keyword) {
 
         if (sortField ==  null || sortField.isEmpty()) {
             sortField = "firstName";
@@ -122,7 +118,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/save")
-    public String saveCustomer(Customer customer, Model model, RedirectAttributes redirectAttributes) {
+    public String saveCustomer(Customer customer, RedirectAttributes redirectAttributes) {
         customerService.save(customer);
         redirectAttributes.addFlashAttribute("message"
                 , "The customer ID " + customer.getId() + " has been updated successfully");
@@ -131,7 +127,6 @@ public class CustomerController {
 
     @GetMapping("/customers/delete/{id}")
     public String deleteCustomer(@PathVariable(name = "id") Integer id,
-                                Model model,
                                 RedirectAttributes redirectAttributes) throws CustomerNotFoundException {
         customerService.delete(id);
 
