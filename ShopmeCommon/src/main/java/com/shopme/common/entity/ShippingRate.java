@@ -2,7 +2,7 @@ package com.shopme.common.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "shipping_rate")
 @Getter
 @Setter
+@ToString
 public class ShippingRate {
 
     @Id
