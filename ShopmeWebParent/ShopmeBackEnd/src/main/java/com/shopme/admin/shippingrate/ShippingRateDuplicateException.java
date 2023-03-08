@@ -1,4 +1,4 @@
-package com.shopme.admin.shipping;
+package com.shopme.admin.shippingrate;
 
 public class ShippingRateDuplicateException extends Exception{
 

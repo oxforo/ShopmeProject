@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<body>
+
+<div th:fragment="cod_support" th:remove="tag">
+  <a th:if="${shippingRate.codSupported == true}" class="fas fa-hand-holding-usd fa-2x icon-green"
+     th:href="@{'/shipping_rates/' + ${shippingRate.id} + '/codSupported/false'}"
+     th:title="'Disable this '+ ${entityName}"></a>
+
+  <a th:if="${shippingRate.codSupported == false}" class="fas fa-hand-holding-usd fa-2x icon-dark"
+     th:href="@{'/shipping_rates/' + ${shippingRate.id} + '/codSupported/true'}"
+     th:title="'Enable this '+ ${entityName}"></a>
+</div>
+</body>
+</html>

@@ -11,9 +11,9 @@
   <div>
     <h2>Manage Shipping</h2>
 
-    <a th:href="@{/shipping/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+    <a th:href="@{/shipping_rates/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
     &nbsp;&nbsp;
-    <a th:href="@{/shipping/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+    <a th:href="@{/shipping_rates/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
   </div>
 
   <div th:replace="fragments :: search_form_and_message" />
@@ -41,26 +41,19 @@
         <td> [[${shippingRate.rate}]]</td>
         <td> [[${shippingRate.days}]]</td>
         <td>
-          <a th:if="${shippingRate.codSupported == true}" class="fas fa-hand-holding-usd fa-2x icon-green"
-             th:href="@{'/shipping/' + ${shippingRate.id} + '/codSupported/false'}"
-             th:title="'Disable this '+ ${entityName}"
-          ></a>
-          <a th:if="${shippingRate.codSupported == false}" class="fas fa-hand-holding-usd fa-2x icon-dark"
-             th:href="@{'/shipping/' + ${shippingRate.id} + '/codSupported/true'}"
-             th:title="'Enable this '+ ${entityName}"
-          ></a>
+          <div th:replace="shipping_rates/shipping_rates_fragment :: cod_support" />
         </td>
         <td>
-          <div th:replace="fragments :: edit('shipping', '/shipping/' + ${shippingRate.id})" />
+          <div th:replace="fragments :: edit('shipping_rates', '/shipping_rates/' + ${shippingRate.id})" />
           &nbsp;
-          <div th:replace="fragments :: delete('shipping', '/shipping/delete/' + ${shippingRate.id}, 'true', ${shippingRate.id})" />
+          <div th:replace="fragments :: delete('shipping_rates', '/shipping_rates/delete/' + ${shippingRate.id}, 'true', ${shippingRate.id})" />
         </td>
       </tr>
       </tbody>
     </table>
   </div>
 
-  <div th:replace="fragments :: pagination('shipping')"></div>
+  <div th:replace="fragments :: pagination('shipping_rates')"></div>
 
   <div th:replace="modal_fragments :: confirm_modal"></div>
 

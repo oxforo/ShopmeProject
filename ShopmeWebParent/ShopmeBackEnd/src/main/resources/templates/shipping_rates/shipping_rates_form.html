@@ -11,7 +11,7 @@
     <h2>Manage Shipping Rates | [[${pageTitle}]]</h2>
   </div>
 
-  <form th:action="@{/shipping}" method="post" style="max-width: 700px; margin: 0 auto"
+  <form th:action="@{/shipping_rates}" method="post" style="max-width: 700px; margin: 0 auto"
         enctype="multipart/form-data"
         onsubmit="return checkUnique(this)"
         th:object="${shippingRate}">
@@ -33,7 +33,7 @@
       <div class="form-group row">
         <label class="col-sm-6 col-form-label">Destination State/Province:</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" th:field="*{state}" minlength="3" maxlength="64" list="listStates" />
+          <input type="text" class="form-control" th:field="*{state}" minlength="3" maxlength="64" list="listStates" required="required" />
           <datalist id="listStates"></datalist>
         </div>
       </div>
@@ -41,14 +41,14 @@
       <div class="form-group row">
         <label class="col-sm-6 col-form-label">Shipping Rate (per DIM weight):</label>
         <div class="col-sm-6">
-          <input type="number" step="0.01" class="form-control" th:field="*{rate}" />
+          <input type="number" step="0.01" class="form-control" th:field="*{rate}" required="required" />
         </div>
       </div>
 
       <div class="form-group row">
         <label class="col-sm-6 col-form-label">Days to deliver</label>
         <div class="col-sm-6">
-          <input type="number" step="1" class="form-control" th:field="*{days}" />
+          <input type="number" step="1" class="form-control" th:field="*{days}" required="required" />
         </div>
       </div>
 
@@ -73,43 +73,10 @@
 </div>
 
 <script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/common_form_country_state.js}"></script>
 <script type="text/javascript">
-  moduleURL = "[[@{/categories/}]]";
-  var dropdownCountries;
-  var dropdownStates;
-
-  $(document).ready(function() {
-    dropdownCountries = $("#country");
-    dropdownStates = $("#listStates");
-
-    dropdownCountries.on("change", function () {
-      loadStates4Country();
-      $("#state").val("").focus();
-    });
-
-    loadStates4Country();
-
-    $('#buttonCancel').click(function () {
-      window.location = "[[@{shipping}]]";
-    });
-  });
-
-  function loadStates4Country() {
-    selectedCountry = $("#country option:selected");
-    countryId = selectedCountry.val();
-
-    url = "[[@{/states/list_by_country/}]]" + countryId;
-
-    $.get(url, function(responseJson) {
-      dropdownStates.empty();
-
-      $.each(responseJson, function(index, state) {
-        $("<option>").val(state.name).text(state.name).appendTo(dropdownStates);
-      });
-    }).fail(function() {
-      showErrorModal("Error loading states/provinces for the selected country");
-    });
-  };
+  moduleURL = "[[@{/shipping_rates/}]]";
+  contextPath = "[[@{/}]]";
 </script>
 
 </body>

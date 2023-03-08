@@ -1,15 +1,9 @@
-package com.shopme.admin.shipping;
+package com.shopme.admin.shippingrate;
 
-import com.shopme.admin.FileUploadUtil;
-import com.shopme.admin.category.CategoryPageInfo;
-import com.shopme.admin.category.CategoryService;
 import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.paging.PagingAndSortingParam;
-import com.shopme.common.entity.Brand;
-import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.ShippingRate;
-import com.shopme.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,37 +20,37 @@ public class ShippingRateController {
     @Autowired
     private ShippingRateService shippingRateService;
 
-    private final String INITIAL_PATH = "/shipping/page/1?sortField=country&sortDir=asc";
-    @GetMapping("/shipping")
+    private final String INITIAL_PATH = "/shipping_rates/page/1?sortField=country&sortDir=asc";
+    @GetMapping("/shipping_rates")
     public String listFirstPage() {
         return "redirect:" + INITIAL_PATH;
     }
 
-    @GetMapping("/shipping/page/{pageNum}")
+    @GetMapping("/shipping_rates/page/{pageNum}")
     public String listByPage(
-            @PagingAndSortingParam(listName = "listShippingRate", moduleURL = "/shipping") PagingAndSortingHelper helper,
+            @PagingAndSortingParam(listName = "listShippingRate", moduleURL = "/shipping_rates") PagingAndSortingHelper helper,
             @PathVariable(name = "pageNum") int pageNum) {
 
 
         shippingRateService.listByPage(pageNum, helper);
 
-        return "shipping/shipping";
+        return "shipping_rates/shipping_rates";
     }
 
-    @GetMapping("/shipping/{id}/codSupported/{codSupported}")
+    @GetMapping("/shipping_rates/{id}/codSupported/{codSupported}")
     public String updateShippingRateEnabledStatus(@PathVariable("id") Integer id,
                                                   @PathVariable("codSupported") boolean codSupported,
                                                   RedirectAttributes redirectAttributes) {
 
         shippingRateService.updateUserEnabledStatus(id, codSupported);
-        String message = "COD suport for shipping rate ID " + id + " has been updated.";
+        String message = "COD support for shipping rate ID " + id + " has been updated.";
 
         redirectAttributes.addFlashAttribute("message", message);
 
         return "redirect:" + INITIAL_PATH;
     }
 
-    @GetMapping("/shipping/new")
+    @GetMapping("/shipping_rates/new")
     public String newShippingRate(Model model) {
 
         List<Country> listCountries = shippingRateService.listAllCountries();
@@ -65,10 +59,10 @@ public class ShippingRateController {
         model.addAttribute("listCountries", listCountries);
         model.addAttribute("pageTitle", "New Rate");
 
-        return "shipping/shipping_form";
+        return "shipping_rates/shipping_rates_form";
     }
 
-    @PostMapping("/shipping")
+    @PostMapping("/shipping_rates")
     public String saveShippingRate(ShippingRate shippingRate, RedirectAttributes redirectAttributes) {
         try {
             shippingRateService.save(shippingRate);
@@ -80,7 +74,7 @@ public class ShippingRateController {
 
         return "redirect:" + INITIAL_PATH;
     }
-    @GetMapping("/shipping/{id}")
+    @GetMapping("/shipping_rates/{id}")
     public String editShippingRate(@PathVariable("id") Integer id, Model model,
                                    RedirectAttributes redirectAttributes) {
 
@@ -92,7 +86,7 @@ public class ShippingRateController {
             model.addAttribute("listCountries", listCountries);
             model.addAttribute("pageTitle", "Manage Shipping Rates | Edit Rate (ID: " + id + ")");
 
-            return "shipping/shipping_form";
+            return "shipping_rates/shipping_rates_form";
         } catch (ShippingRateNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 
@@ -100,7 +94,7 @@ public class ShippingRateController {
         }
     }
 
-    @GetMapping("/shipping/delete/{id}")
+    @GetMapping("/shipping_rates/delete/{id}")
     public String deleteCategory(@PathVariable(name = "id") Integer id,
                                  RedirectAttributes redirectAttributes) {
         try {

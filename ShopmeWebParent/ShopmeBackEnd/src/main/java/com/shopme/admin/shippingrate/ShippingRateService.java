@@ -1,10 +1,9 @@
-package com.shopme.admin.shipping;
+package com.shopme.admin.shippingrate;
 
 import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.setting.country.CountryRepository;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.ShippingRate;
-import org.hibernate.DuplicateMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class ShippingRateService {
     }
 
     public void updateUserEnabledStatus(Integer id, boolean codSupported) {
-        shippingRateRepository.updateEnabledStatus(id, codSupported);
+        shippingRateRepository.updateCODSupport(id, codSupported);
     }
 
     public List<Country> listAllCountries() {
@@ -34,13 +33,12 @@ public class ShippingRateService {
 
     public void save(ShippingRate shippingRateInForm) throws ShippingRateDuplicateException {
 
-        System.out.println("shippingRateInForm = " + shippingRateInForm);
 
-        ShippingRate shippingRateInDB = null;
+        ShippingRate rateInDB = null;
         if (shippingRateInForm.getId() != null) {
-            shippingRateInDB = shippingRateRepository.findById(shippingRateInForm.getId()).get();
+            rateInDB = shippingRateRepository.findById(shippingRateInForm.getId()).get();
         } else {
-            shippingRateInDB = new ShippingRate();
+            rateInDB = new ShippingRate();
 
             Long countByCountryAndState = shippingRateRepository.countByCountryAndState(
                     shippingRateInForm.getCountry(),
@@ -52,13 +50,13 @@ public class ShippingRateService {
             }
         }
 
-        shippingRateInDB.setCountry(shippingRateInForm.getCountry());
-        shippingRateInDB.setRate(shippingRateInForm.getRate());
-        shippingRateInDB.setDays(shippingRateInForm.getDays());
-        shippingRateInDB.setCodSupported(shippingRateInForm.getCodSupported());
-        shippingRateInDB.setState(shippingRateInForm.getState());
+        rateInDB.setCountry(shippingRateInForm.getCountry());
+        rateInDB.setRate(shippingRateInForm.getRate());
+        rateInDB.setDays(shippingRateInForm.getDays());
+        rateInDB.setCodSupported(shippingRateInForm.getCodSupported());
+        rateInDB.setState(shippingRateInForm.getState());
 
-        shippingRateRepository.save(shippingRateInDB);
+        shippingRateRepository.save(rateInDB);
     }
 
     public ShippingRate get(Integer id) throws ShippingRateNotFoundException {

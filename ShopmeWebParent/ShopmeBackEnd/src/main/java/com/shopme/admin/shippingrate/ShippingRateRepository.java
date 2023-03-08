@@ -1,4 +1,4 @@
-package com.shopme.admin.shipping;
+package com.shopme.admin.shippingrate;
 
 
 import com.shopme.admin.paging.SearchRepository;
@@ -11,12 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ShippingRateRepository extends SearchRepository<ShippingRate, Integer> {
 
-    @Query("SELECT s FROM ShippingRate s WHERE CONCAT(s.country.name, ' ', s.state) LIKE %?1%")
+    @Query("SELECT sr FROM ShippingRate sr WHERE CONCAT(sr.country.name, ' ', sr.state) LIKE %?1%")
     public Page<ShippingRate> findAll(String keyword, Pageable pageable);
 
-    @Query("UPDATE ShippingRate s SET s.codSupported = ?2 WHERE s.id = ?1")
+    @Query("UPDATE ShippingRate sr SET sr.codSupported = ?2 WHERE sr.id = ?1")
     @Modifying
-    void updateEnabledStatus(Integer id, boolean codSupported);
+    void updateCODSupport(Integer id, boolean enabled);
 
     Long countById(Integer id);
 
