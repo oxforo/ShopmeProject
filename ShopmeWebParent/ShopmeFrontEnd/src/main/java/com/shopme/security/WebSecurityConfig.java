@@ -48,7 +48,8 @@ public class WebSecurityConfig {
                 .authorizeRequests((authz) -> {
                             try {
                                 authz
-                                        .antMatchers("/account_details", "/update_account_details", "/cart").authenticated()
+                                        .antMatchers("/account_details", "/update_account_details",
+                                                "/cart", "/address_book/*").authenticated()
                                         .anyRequest().permitAll()
                                         .and()
                                         .formLogin()

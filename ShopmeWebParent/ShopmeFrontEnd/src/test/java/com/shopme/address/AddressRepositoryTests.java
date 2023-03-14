@@ -41,7 +41,7 @@ class AddressRepositoryTests {
         address.setCity("Seoul");
         address.setState("Korea");
         address.setPostalCode("1234");
-        address.setDefaultAddress(Boolean.FALSE);
+        address.setDefaultForShipping(Boolean.FALSE);
 
 
         //when

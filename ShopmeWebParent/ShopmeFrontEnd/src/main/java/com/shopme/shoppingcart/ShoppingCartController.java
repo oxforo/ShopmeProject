@@ -40,6 +40,4 @@ public class ShoppingCartController {
         String email = Utility.getEmailOfAuthenticatedCustomer(request);
         return customerService.getCustomerByEmail(email);
     }
-
-
 }
